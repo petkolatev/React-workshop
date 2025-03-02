@@ -21,8 +21,15 @@ export default function UserList() {
     setShowCreate(true)
   }
 
-  const closeCreateUserHandler= ()=>{
+  const closeCreateUserHandler = () => {
     setShowCreate(false)
+  }
+
+  const saveCreateUserClickHandler = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const formValues = Object.fromEntries(formData)
+    console.log(formValues);
   }
 
   return (
@@ -30,7 +37,12 @@ export default function UserList() {
 
       <Search />
 
-      {showCreate && <UserCreate onClose={closeCreateUserHandler} />}
+      {showCreate && (
+        <UserCreate
+          onClose={closeCreateUserHandler}
+          onSave={saveCreateUserClickHandler}
+
+        />)}
 
       <div className="table-wrapper">
         <div>
