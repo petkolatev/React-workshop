@@ -9,6 +9,12 @@ export default {
         return users
     },
     async create(userDate) {
+        const {country,city,street,streetNumber,postDate} = userDate
+
+        postDate.address = {country,city,street,streetNumber}
+        postDate. createdAt=new Date().toISOString()
+        postDate. updatedAt=new Date().toISOString()
+          
         const response = await fetch(baseURL, {
             method: 'POST',
             headers: {
