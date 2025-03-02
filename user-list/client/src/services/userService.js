@@ -9,7 +9,7 @@ export default {
         return users
     },
     async create(userDate) {
-        const {country,city,street,streetNumber,postDate} = userDate
+        const {country,city,street,streetNumber,...postDate} = userDate
 
         postDate.address = {country,city,street,streetNumber}
         postDate. createdAt=new Date().toISOString()
