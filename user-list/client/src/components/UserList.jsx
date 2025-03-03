@@ -5,11 +5,13 @@ import UserListItem from "./UserListItem";
 import userService from "../services/userService";
 import UserCreate from "./UserCreate";
 import UserInfo from "./UserInfo";
+import UserDelete from "./UserDelete";
 
 export default function UserList() {
   const [users, setUsers] = useState([])
   const [showCreate, setShowCreate] = useState(false)
   const [userIdInfo, setUserIdInfo] = useState(null)
+  const [userIdDelete, setUserIdDelete] = useState(null)
 
   useEffect(() => {
     userService.getAll()
@@ -44,6 +46,20 @@ export default function UserList() {
     setUserIdInfo(null)
   }
 
+  const userDeleteClickHandler = (userId) => {
+    setUserIdDelete(userId)
+  }
+
+  const userDeleteCloseHandler = () => {
+    setUserIdDelete(null)
+  }
+
+  const userDeleteHandler = async (userId) => {
+    await userService.delete(userIdDelete)
+    setUsers(state => state.filter(user => user._id !== userIdDelete))
+    setUserIdDelete(null)
+  }
+
   return (
     <section className="card users-container">
 
@@ -56,7 +72,17 @@ export default function UserList() {
 
         />)}
 
-      {userIdInfo && (<UserInfo userId={userIdInfo} onClose={userInfoCloseHandler} />)}
+      {userIdInfo && (
+        <UserInfo
+          userId={userIdInfo}
+          onClose={userInfoCloseHandler}
+        />)}
+
+      {userIdDelete &&
+        <UserDelete
+          onClose={userDeleteCloseHandler}
+          onDelete={userDeleteHandler}
+        />}
 
       <div className="table-wrapper">
         <div>
@@ -169,7 +195,12 @@ export default function UserList() {
             </tr>
           </thead>
           <tbody>
-            {users.map(user => <UserListItem key={user._id} onInfoClick={userInfoClickHandler} {...user} />)}
+            {users.map(user => <UserListItem
+              key={user._id}
+              onInfoClick={userInfoClickHandler}
+              onDeleteClick={userDeleteClickHandler}
+              {...user}
+            />)}
 
           </tbody>
         </table>
